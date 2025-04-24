@@ -40,6 +40,13 @@ pub fn main() void {
     const bb = aa[1..end];
     bb[2] = 99;
     // bb = bb[1..];
+
+    if (std.ascii.eqlIgnoreCase("GET", "GET")) {
+        std.debug.print("Checking if statements\n", .{});
+    }
+
+    std.debug.print("Anniversary name: {s}\n", .{anniversaryName(1)});
+    std.debug.print("Arrival time: {s}\n", .{arrivalTimeDisc(4, true)});
 }
 
 // pub fn main() void {
@@ -50,4 +57,31 @@ pub fn main() void {
 // Function parameters are constants!
 fn add(a: i64, b: i64) i64 {
     return a + b;
+}
+
+fn anniversaryName(years_married: u16) []const u8 {
+    switch (years_married) {
+        1 => return "paper",
+        2 => return "cotton",
+        3 => return "leather",
+        4 => return "flower",
+        5 => return "wood",
+        6 => return "sugar",
+        else => return "no more gifts for you",
+    }
+}
+
+fn arrivalTimeDisc(minutes: u16, is_late: bool) []const u8 {
+    switch (minutes) {
+        0 => return "arrived",
+        1, 2 => return "soon",
+        3...5 => return "no more than 5 minutes",
+        else => {
+            if (!is_late) {
+                return "sorry, it'll be a while";
+            }
+            // todo, something is very wrong
+            return "never";
+        }
+    }
 }
