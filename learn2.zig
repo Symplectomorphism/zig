@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub fn main() void {
+pub fn main() !void {
     const myStatus = Status.ok;
     const myStage = Stage.confirmed;
 
@@ -29,6 +29,17 @@ pub fn main() void {
         const char = "d";
         std.debug.print("{c}\n", .{char});
     }
+
+
+    var pseudo_uuid: [16]u8 = undefined;
+    std.crypto.random.bytes(&pseudo_uuid);
+
+    // This is the line you want to focus on
+    const save = (try Save.loadLast()) orelse Save.blank();
+    std.debug.print("{any}\n", .{save});
+
+    // return OpenError.AccessDenied;
+    return error.AccessDenied;
 }
 
 // could be "pub"
@@ -87,3 +98,27 @@ const Timestamp = union(TimestampType) {
 };
 
 
+pub const Save = struct {
+    lives: u8,
+    level: u16,
+
+    pub fn loadLast() !?Save {
+        // todo
+        return null;
+    }
+
+    pub fn blank() Save {
+        return .{
+            .lives = 3,
+            .level = 1,
+        };
+    }
+};
+
+
+// Like our strcut in Part 1, OpenError can be marked as "pub"
+// to make it accessible outside of the file it is defined in
+const OpenError = error {
+    AccessDenied,
+    NotFound,
+};
